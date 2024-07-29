@@ -1,22 +1,62 @@
-import axios from "axios";
+import apiRequest from ".";
 
-const MOBILE_OS = "ETC";
-const MOBILE_APP = "GO_CAMPING_MAP";
-const TYPE = "json";
-const NUM_OF_ROWS = 10;
+export const getBasedList = async (pageNo: number = 1) => {
+  return await apiRequest.get("/basedList", {
+    params: {
+      pageNo,
+    },
+  });
+};
 
-export const getBasedList = async () => {
-  return await axios.get(
-    "https://apis.data.go.kr/B551011/GoCamping/basedList",
-    {
-      params: {
-        MobileOS: MOBILE_OS,
-        MobileApp: MOBILE_APP,
-        _type: TYPE,
-        serviceKey: import.meta.env.VITE_API_KEY,
-        numOfRows: NUM_OF_ROWS,
-        pageNo: 1,
-      },
-    }
-  );
+export const getLocationBasedList = async ({
+  pageNo = 1,
+  mapX,
+  mapY,
+  radius,
+}: {
+  pageNo: number;
+  mapX: string;
+  mapY: string;
+  radius: string;
+}) => {
+  return await apiRequest.get("/locationBasedList", {
+    params: {
+      pageNo,
+      mapX,
+      mapY,
+      radius,
+    },
+  });
+};
+
+export const getSearchList = async ({
+  pageNo = 1,
+  keyword,
+}: {
+  pageNo: number;
+  keyword: string;
+}) => {
+  console.log("key :", keyword);
+
+  return await apiRequest.get("/searchList", {
+    params: {
+      pageNo,
+      keyword,
+    },
+  });
+};
+
+export const getImageList = async ({
+  pageNo = 1,
+  contentId,
+}: {
+  pageNo: number;
+  contentId: string;
+}) => {
+  return await apiRequest.get("/imageList", {
+    params: {
+      pageNo,
+      contentId,
+    },
+  });
 };
