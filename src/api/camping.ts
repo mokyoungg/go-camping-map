@@ -1,7 +1,8 @@
 import apiRequest from ".";
+import { ICampItem, IImageItem } from "../type/camping";
 
 export const getBasedList = async (pageNo: number = 1) => {
-  return await apiRequest.get("/basedList", {
+  return await apiRequest.get<ICampItem[]>("/basedList", {
     params: {
       pageNo,
     },
@@ -19,7 +20,7 @@ export const getLocationBasedList = async ({
   mapY: string;
   radius: string;
 }) => {
-  return await apiRequest.get("/locationBasedList", {
+  return await apiRequest.get<ICampItem[]>("/locationBasedList", {
     params: {
       pageNo,
       mapX,
@@ -38,7 +39,7 @@ export const getSearchList = async ({
 }) => {
   console.log("key :", keyword);
 
-  return await apiRequest.get("/searchList", {
+  return await apiRequest.get<ICampItem[]>("/searchList", {
     params: {
       pageNo,
       keyword,
@@ -53,7 +54,7 @@ export const getImageList = async ({
   pageNo: number;
   contentId: string;
 }) => {
-  return await apiRequest.get("/imageList", {
+  return await apiRequest.get<IImageItem[]>("/imageList", {
     params: {
       pageNo,
       contentId,
