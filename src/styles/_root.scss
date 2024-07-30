@@ -1,0 +1,31 @@
+@import "./colors";
+@import "./font";
+
+:root {
+  --black: #{$black};
+  --white: #{$white};
+
+  --gray1: #{$gray1};
+  --gray2: #{$gray2};
+  --gray3: #{$gray3};
+
+  --red1: #{$red1};
+  --red2: #{$red2};
+  --red3: #{$red3};
+
+  --green1: #{$green1};
+  --green2: #{$green2};
+
+  --h1: normal 700 2rem/2.625rem #{$text-font-faces};
+  --h2: normal 700 1.25rem/1.625rem #{$text-font-faces};
+  --h3: normal 500 1rem/1.3125rem #{$text-font-faces};
+  --h4: normal 500 0.875rem/1.125rem #{$text-font-faces};
+
+  --body1: normal 400 1.75rem/2.3125rem #{$text-font-faces};
+  --body2: normal 400 1.25rem/1.625rem #{$text-font-faces};
+  --body3: normal 400 1rem/1.3125rem #{$text-font-faces};
+  --body4: normal 400 0.875rem/1.125rem #{$text-font-faces};
+
+  --caption1: normal 400 0.75rem/1rem #{$text-font-faces};
+  --caption2: normal 400 0.625rem/0.8125rem #{$text-font-faces};
+}
