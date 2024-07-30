@@ -1,0 +1,20 @@
+$spoqa: "Spoaq";
+$text-font-faces: $spoqa, "Noto Sans KR", sans-serif;
+
+@font-face {
+  font-family: $spoqa;
+  src: url("../asset/font/SpoqaHanSansNeo-Regular.woff2") format("woff2");
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: $spoqa;
+  src: url("../asset/font/SpoqaHanSansNeo-Medium.woff2") format("woff2");
+  font-weight: 500;
+}
+
+@font-face {
+  font-family: $spoqa;
+  src: url("../asset/font/SpoqaHanSansNeo-Bold.woff2") format("woff2");
+  font-weight: 700;
+}
