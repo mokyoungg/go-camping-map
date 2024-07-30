@@ -1,0 +1,37 @@
+@import "../../../styles/utils";
+
+.button {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: rem(12);
+  border: 1px solid var(--gray1);
+  color: var(--gray1);
+  background-color: transparent;
+  cursor: pointer;
+
+  &:hover {
+    background-color: var(--green1);
+    border-color: var(--green1);
+  }
+
+  &:disabled {
+    color: var(--gray3);
+    background-color: var(--gray3);
+    border-color: var(--gray3);
+    pointer-events: none;
+  }
+
+  &--small {
+    width: rem(122);
+    height: rem(40);
+    font: var(--body2);
+  }
+
+  &--medium {
+    width: rem(198);
+    height: rem(56);
+    font: var(--h2);
+  }
+}
