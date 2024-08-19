@@ -37,8 +37,6 @@ export const getSearchList = async ({
   pageNo: number;
   keyword: string;
 }) => {
-  console.log("key :", keyword);
-
   return await apiRequest.get<ICampItem[]>("/searchList", {
     params: {
       pageNo,
