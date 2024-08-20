@@ -15,39 +15,7 @@ const Map = () => {
     lat: 37.5665,
     lng: 126.978,
   });
-
-  // observer map center
-  useEffect(() => {
-    if (!mapElement.current || !naver) return;
-
-    const mapOptions = {
-      center: new naver.maps.LatLng(
-        centerRef.current.lat,
-        centerRef.current.lng
-      ),
-      zoom: 13,
-    };
-
-    const map = new naver.maps.Map(mapElement.current, mapOptions);
-
-    naver.maps.Event.addListener(map, "center_changed", () => {
-      const center = map.getCenter();
-      centerRef.current = {
-        lat: center.x,
-        lng: center.y,
-      };
-    });
-
-    return () => {
-      // naver.maps.Event.removeListener();
-    };
-  }, []);
-
-  const getCenter = () => {
-    const { lat, lng } = centerRef.current;
-
-    setMapCenter({ lat: lat, lng: lng });
-  };
+  const [map, setMap] = useState<naver.maps.Map | null>(null);
 
   const { data: locationList } = useQuery({
     queryKey: ["location-list", mapCenter],
@@ -59,6 +27,59 @@ const Map = () => {
         radius: "10000",
       }),
   });
+
+  // Initialize map and observe center change
+  useEffect(() => {
+    if (!mapElement.current || !naver) return;
+
+    const mapOptions = {
+      center: new naver.maps.LatLng(
+        centerRef.current.lat,
+        centerRef.current.lng
+      ),
+      zoom: 13,
+    };
+
+    const mapInstance = new naver.maps.Map(mapElement.current, mapOptions);
+    setMap(mapInstance);
+
+    naver.maps.Event.addListener(mapInstance, "center_changed", () => {
+      const center = mapInstance.getCenter();
+      centerRef.current = {
+        lat: center.x,
+        lng: center.y,
+      };
+    });
+
+    return () => {
+      naver.maps.Event.clearInstanceListeners(mapInstance);
+    };
+  }, [naver]);
+
+  // Update markers when locationList changes
+  useEffect(() => {
+    if (!locationList || !locationList.items || !map) {
+      return;
+    }
+
+    locationList.items.item.forEach((item, idx) => {
+      const position = new naver.maps.LatLng(
+        Number(item.mapY),
+        Number(item.mapX)
+      );
+
+      new naver.maps.Marker({
+        position: position,
+        map,
+        title: item.facltNm,
+      });
+    });
+  }, [locationList, map]);
+
+  const getCenter = () => {
+    const { lat, lng } = centerRef.current;
+    setMapCenter({ lat, lng });
+  };
 
   return (
     <div>

@@ -19,11 +19,11 @@ const baseInstance = axios.create({
 });
 
 export interface ResponseData<T> {
-  body: {
-    numOfRows: number;
-    pageNo: number;
-    totalCount: number;
-    items: T;
+  numOfRows: number;
+  pageNo: number;
+  totalCount: number;
+  items: {
+    item: T;
   };
 }
 
