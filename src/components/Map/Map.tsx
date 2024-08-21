@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { getLocationBasedList } from "../../api/camping";
+import Marker from "./Marker/Marker";
+import ReactDOMServer from "react-dom/server";
 
 const Map = () => {
   const { naver } = window;
@@ -62,16 +64,24 @@ const Map = () => {
       return;
     }
 
-    locationList.items.item.forEach((item, idx) => {
+    locationList.items.item.forEach((item) => {
       const position = new naver.maps.LatLng(
         Number(item.mapY),
         Number(item.mapX)
+      );
+
+      const markerHtml = ReactDOMServer.renderToString(
+        <Marker title={item.facltNm} />
       );
 
       new naver.maps.Marker({
         position: position,
         map,
         title: item.facltNm,
+        icon: {
+          content: markerHtml,
+          anchor: new naver.maps.Point(16, 32),
+        },
       });
     });
   }, [locationList, map]);
