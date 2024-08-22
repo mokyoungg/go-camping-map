@@ -1,5 +1,12 @@
-import { ChangeEvent, useCallback, useEffect, useRef, useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import {
+  ChangeEvent,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import { getLocationBasedList } from "../../api/camping";
 import Marker from "./Marker/Marker";
 import ReactDOMServer from "react-dom/server";
@@ -7,6 +14,7 @@ import Input from "../UI/Input/Input";
 import Button from "../UI/Button/Button";
 import styles from "./Map.module.scss";
 import classNames from "classnames/bind";
+import { ICampItem } from "../../type/camping";
 
 const cx = classNames.bind(styles);
 
@@ -24,17 +32,35 @@ const Map = () => {
     lng: 126.978,
   });
 
-  // get Data based Map Center
-  const { data } = useQuery({
+  const { data, fetchNextPage, hasNextPage, isFetching } = useInfiniteQuery({
     queryKey: ["location-list", lat, lng],
-    queryFn: () =>
+    queryFn: ({ pageParam }) =>
       getLocationBasedList({
-        pageNo: 1,
+        pageNo: pageParam,
         mapX: lat.toString(),
         mapY: lng.toString(),
         radius: "10000",
       }),
+    initialPageParam: 1,
+    getNextPageParam: (lastPage, pages) => {
+      const totalPages = Math.ceil(lastPage.totalCount / lastPage.numOfRows);
+      const nextPage = pages.length + 1;
+
+      return nextPage <= totalPages ? nextPage : undefined;
+    },
   });
+
+  const locationBasedList = useMemo(() => {
+    if (!data?.pages) return [];
+
+    return data.pages.reduce((acc: ICampItem[], cur) => {
+      if (cur?.items?.item) {
+        return acc.concat(cur.items.item);
+      }
+
+      return acc;
+    }, []);
+  }, [data]);
 
   // Initialize map
   useEffect(() => {
@@ -69,11 +95,11 @@ const Map = () => {
 
   // Update Markers when locationsList was changed
   useEffect(() => {
-    if (!data || !data.items || !map) {
+    if (!locationBasedList || !map) {
       return;
     }
 
-    data.items.item.forEach((item) => {
+    locationBasedList.forEach((item: ICampItem) => {
       const position = new naver.maps.LatLng(
         Number(item.mapY),
         Number(item.mapX)
@@ -93,7 +119,7 @@ const Map = () => {
         },
       });
     });
-  }, [map, data]);
+  }, [map, locationBasedList]);
 
   const updateCenterLatAndLng = useCallback(() => {
     const { lat, lng } = mapCenterRef.current;
@@ -145,6 +171,9 @@ const Map = () => {
       <div ref={mapElement} style={{ width: "100%", height: "500px" }} />
 
       <button onClick={updateCenterLatAndLng}>Update Center</button>
+      <button onClick={() => fetchNextPage()} disabled={!hasNextPage}>
+        Load More
+      </button>
     </div>
   );
 };
