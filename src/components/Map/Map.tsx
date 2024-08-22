@@ -1,4 +1,4 @@
-import { ChangeEvent, useEffect, useRef, useState } from "react";
+import { ChangeEvent, useCallback, useEffect, useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { getLocationBasedList } from "../../api/camping";
 import Marker from "./Marker/Marker";
@@ -13,65 +13,67 @@ const cx = classNames.bind(styles);
 const Map = () => {
   const { naver } = window;
 
-  const mapElement = useRef<HTMLDivElement>(null);
-  const centerRef = useRef<{ lat: number; lng: number }>({
-    lat: 37.5665,
-    lng: 126.978,
-  });
-
-  const [mapCenter, setMapCenter] = useState<{ lat: number; lng: number }>({
-    lat: 37.5665,
-    lng: 126.978,
-  });
-
   const [map, setMap] = useState<naver.maps.Map | null>(null);
+  const [lat, setLat] = useState<number>(37.5665);
+  const [lng, setLng] = useState<number>(126.978);
+  const [locationKeyword, setLocationKeyword] = useState<string>("");
 
-  const { data: locationList } = useQuery({
-    queryKey: ["location-list", mapCenter.lat, mapCenter.lng],
+  const mapElement = useRef<HTMLDivElement>(null);
+  const mapCenterRef = useRef<{ lat: number; lng: number }>({
+    lat: 37.5665,
+    lng: 126.978,
+  });
+
+  // get Data based Map Center
+  const { data } = useQuery({
+    queryKey: ["location-list", lat, lng],
     queryFn: () =>
       getLocationBasedList({
         pageNo: 1,
-        mapX: mapCenter.lat.toString(),
-        mapY: mapCenter.lng.toString(),
+        mapX: lat.toString(),
+        mapY: lng.toString(),
         radius: "10000",
       }),
   });
 
-  // Initialize map and observe center change
+  // Initialize map
   useEffect(() => {
     if (!mapElement.current || !naver) return;
 
-    const mapOptions = {
-      center: new naver.maps.LatLng(
-        centerRef.current.lat,
-        centerRef.current.lng
-      ),
+    const mapOption = {
+      center: new naver.maps.LatLng(lat, lng),
       zoom: 13,
     };
 
-    const mapInstance = new naver.maps.Map(mapElement.current, mapOptions);
+    const mapInstance = new naver.maps.Map(mapElement.current, mapOption);
     setMap(mapInstance);
-
-    naver.maps.Event.addListener(mapInstance, "center_changed", () => {
-      const center = mapInstance.getCenter();
-      centerRef.current = {
-        lat: center.x,
-        lng: center.y,
-      };
-    });
 
     return () => {
       naver.maps.Event.clearInstanceListeners(mapInstance);
     };
   }, [naver]);
 
-  // Update markers when locationList changes
+  // Observe Map Center Changed
   useEffect(() => {
-    if (!locationList || !locationList.items || !map) {
+    if (!naver || !map) return;
+
+    naver.maps.Event.addListener(map, "center_changed", () => {
+      const center = map.getCenter();
+
+      mapCenterRef.current = {
+        lat: center.x,
+        lng: center.y,
+      };
+    });
+  }, [naver, map]);
+
+  // Update Markers when locationsList was changed
+  useEffect(() => {
+    if (!data || !data.items || !map) {
       return;
     }
 
-    locationList.items.item.forEach((item) => {
+    data.items.item.forEach((item) => {
       const position = new naver.maps.LatLng(
         Number(item.mapY),
         Number(item.mapX)
@@ -91,59 +93,58 @@ const Map = () => {
         },
       });
     });
-  }, [locationList, map]);
+  }, [map, data]);
 
-  const getCenter = () => {
-    const { lat, lng } = centerRef.current;
-    setMapCenter({ lat, lng });
-  };
+  const updateCenterLatAndLng = useCallback(() => {
+    const { lat, lng } = mapCenterRef.current;
+    setLat(lat);
+    setLng(lng);
+  }, []);
 
-  const [keyword, setKeyword] = useState("");
-
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setKeyword(e.target.value);
-  };
-
-  const searchLocation = async () => {
+  const searchLocationKeyword = useCallback(() => {
     if (!naver || !map) return;
 
-    naver.maps.Service.geocode({ query: keyword }, (status, response) => {
-      if (status === naver.maps.Service.Status.ERROR) {
-        return alert("Something wrong!");
+    naver.maps.Service.geocode(
+      { query: locationKeyword },
+      (status, response) => {
+        if (status === naver.maps.Service.Status.ERROR) {
+          return alert("Something wrong!");
+        }
+
+        const responseAddress = response.v2.addresses[0];
+
+        const newCenter = {
+          lat: Number(responseAddress.x),
+          lng: Number(responseAddress.y),
+        };
+
+        map.setCenter(new naver.maps.LatLng(newCenter.lng, newCenter.lat));
+        setLat(newCenter.lat);
+        setLng(newCenter.lng);
       }
+    );
+  }, [naver, map, locationKeyword]);
 
-      const resAddress = response.v2.addresses[0];
-
-      const newMapCenter = {
-        lat: Number(resAddress.x),
-        lng: Number(resAddress.y),
-      };
-
-      setMapCenter(newMapCenter);
-      map.setCenter(new naver.maps.LatLng(newMapCenter.lng, newMapCenter.lat));
-      centerRef.current.lat = newMapCenter.lat;
-      centerRef.current.lng = newMapCenter.lng;
-
-      getCenter();
-    });
-  };
+  const handleChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+    setLocationKeyword(e.target.value);
+  }, []);
 
   return (
     <div className={cx("container")}>
       <div className={cx("search-container")}>
         <Input
           placeholder="지역 검색"
-          value={keyword}
+          value={locationKeyword}
           onChange={handleChange}
         />
-        <Button size="small" onClick={searchLocation}>
+        <Button size="small" onClick={searchLocationKeyword}>
           검색
         </Button>
       </div>
 
       <div ref={mapElement} style={{ width: "100%", height: "500px" }} />
 
-      <button onClick={getCenter}>Get Center</button>
+      <button onClick={updateCenterLatAndLng}>Update Center</button>
     </div>
   );
 };
