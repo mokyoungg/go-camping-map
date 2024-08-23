@@ -18,6 +18,14 @@ import { ICampItem } from "../../type/camping";
 
 const cx = classNames.bind(styles);
 
+const ZOOM_LEVEL = {
+  11: 20000,
+  12: 10000,
+  13: 5000,
+  14: 3000,
+  15: 1000,
+} as const;
+
 const Map = () => {
   const { naver } = window;
 
@@ -25,21 +33,23 @@ const Map = () => {
   const [lat, setLat] = useState<number>(37.5665);
   const [lng, setLng] = useState<number>(126.978);
   const [locationKeyword, setLocationKeyword] = useState<string>("");
+  const [zoomLevel, setZoomLevel] = useState<keyof typeof ZOOM_LEVEL>(13);
 
   const mapElement = useRef<HTMLDivElement>(null);
   const mapCenterRef = useRef<{ lat: number; lng: number }>({
     lat: 37.5665,
     lng: 126.978,
   });
+  const mapZoomRef = useRef<keyof typeof ZOOM_LEVEL>(13);
 
   const { data, fetchNextPage, hasNextPage, isFetching } = useInfiniteQuery({
-    queryKey: ["location-list", lat, lng],
+    queryKey: ["location-list", lat, lng, zoomLevel],
     queryFn: ({ pageParam }) =>
       getLocationBasedList({
         pageNo: pageParam,
         mapX: lat.toString(),
         mapY: lng.toString(),
-        radius: "10000",
+        radius: ZOOM_LEVEL[zoomLevel].toString(),
       }),
     initialPageParam: 1,
     getNextPageParam: (lastPage, pages) => {
@@ -69,6 +79,11 @@ const Map = () => {
     const mapOption = {
       center: new naver.maps.LatLng(lat, lng),
       zoom: 13,
+      minZoom: 11,
+      maxZoom: 15,
+      zoomControlOptions: {
+        position: naver.maps.Position.TOP_RIGHT,
+      },
     };
 
     const mapInstance = new naver.maps.Map(mapElement.current, mapOption);
@@ -90,6 +105,17 @@ const Map = () => {
         lat: center.x,
         lng: center.y,
       };
+    });
+  }, [naver, map]);
+
+  // Observe Map Zoom Change
+  useEffect(() => {
+    if (!naver || !map) return;
+
+    naver.maps.Event.addListener(map, "zoom_changed", () => {
+      const zoomLevel = map.getZoom();
+
+      mapZoomRef.current = zoomLevel as keyof typeof ZOOM_LEVEL;
     });
   }, [naver, map]);
 
@@ -155,32 +181,22 @@ const Map = () => {
       markers.push(marker);
     });
 
-    const zoomChanged = naver.maps.Event.addListener(
-      map,
-      "zoom_changed",
-      () => {
-        updateMarkers(map, markers);
-      }
-    );
+    naver.maps.Event.addListener(map, "zoom_changed", () => {
+      updateMarkers(map, markers);
+    });
 
-    const mapCenterChanged = naver.maps.Event.addListener(
-      map,
-      "dragend",
-      function () {
-        updateMarkers(map, markers);
-      }
-    );
-
-    return () => {
-      naver.maps.Event.removeListener(zoomChanged);
-      naver.maps.Event.removeListener(mapCenterChanged);
-    };
+    naver.maps.Event.addListener(map, "dragend", function () {
+      updateMarkers(map, markers);
+    });
   }, [map, locationBasedList, updateMarkers]);
 
-  const updateCenterLatAndLng = useCallback(() => {
+  const getLocationBasedData = useCallback(() => {
     const { lat, lng } = mapCenterRef.current;
+    const zoomLevel = mapZoomRef.current;
+
     setLat(lat);
     setLng(lng);
+    setZoomLevel(zoomLevel);
   }, []);
 
   const searchLocationKeyword = useCallback(() => {
@@ -226,7 +242,7 @@ const Map = () => {
 
       <div ref={mapElement} style={{ width: "100%", height: "500px" }} />
 
-      <button onClick={updateCenterLatAndLng}>Update Center</button>
+      <button onClick={getLocationBasedData}>Update Center</button>
       <button onClick={() => fetchNextPage()} disabled={!hasNextPage}>
         Load More
       </button>
