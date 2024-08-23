@@ -93,11 +93,44 @@ const Map = () => {
     });
   }, [naver, map]);
 
+  // show and hide marker
+  const updateMarkers = useCallback(
+    (map: naver.maps.Map, markers: naver.maps.Marker[]) => {
+      const mapBounds = map.getBounds();
+
+      const showMarker = (marker: naver.maps.Marker) => {
+        if (marker.getMap()) return;
+
+        marker.setMap(map);
+      };
+
+      const hideMarker = (marker: naver.maps.Marker) => {
+        if (!marker.getMap()) return;
+
+        marker.setMap(null);
+      };
+
+      for (let i = 0; i < markers.length; i++) {
+        let marker = markers[i];
+        let position = marker.getPosition();
+
+        if (mapBounds.hasPoint(position)) {
+          showMarker(marker);
+        } else {
+          hideMarker(marker);
+        }
+      }
+    },
+    []
+  );
+
   // Update Markers when locationsList was changed
   useEffect(() => {
     if (!locationBasedList || !map) {
       return;
     }
+
+    const markers: naver.maps.Marker[] = [];
 
     locationBasedList.forEach((item: ICampItem) => {
       const position = new naver.maps.LatLng(
@@ -109,7 +142,7 @@ const Map = () => {
         <Marker title={item.facltNm} />
       );
 
-      new naver.maps.Marker({
+      const marker = new naver.maps.Marker({
         position: position,
         map,
         title: item.facltNm,
@@ -118,8 +151,31 @@ const Map = () => {
           anchor: new naver.maps.Point(16, 32),
         },
       });
+
+      markers.push(marker);
     });
-  }, [map, locationBasedList]);
+
+    const zoomChanged = naver.maps.Event.addListener(
+      map,
+      "zoom_changed",
+      () => {
+        updateMarkers(map, markers);
+      }
+    );
+
+    const mapCenterChanged = naver.maps.Event.addListener(
+      map,
+      "dragend",
+      function () {
+        updateMarkers(map, markers);
+      }
+    );
+
+    return () => {
+      naver.maps.Event.removeListener(zoomChanged);
+      naver.maps.Event.removeListener(mapCenterChanged);
+    };
+  }, [map, locationBasedList, updateMarkers]);
 
   const updateCenterLatAndLng = useCallback(() => {
     const { lat, lng } = mapCenterRef.current;
