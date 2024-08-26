@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useRef } from "react";
 import Marker from "./Marker/Marker";
 import ReactDOMServer from "react-dom/server";
-import Button from "../UI/Button/Button";
 import styles from "./Map.module.scss";
 import classNames from "classnames/bind";
 import { ICampItem } from "../../type/camping";
