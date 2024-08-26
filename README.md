@@ -1,3 +1,30 @@
+# Go Camping Map
+naver map api 와 camping data api 를 활용하여 지도상에서 캠핑 위치를 파악할 수 있습니다.
+
+### Demo1. 지도 검색 후 캠핑 리스트 보여주기
+https://github.com/user-attachments/assets/668572f1-947d-42fd-8d2b-ee193597304b
+
+### Demo2. 지도에서 캠핑 리스트 찾기
+https://github.com/user-attachments/assets/d09f0f00-64a6-4103-aac7-5c262379d370
+
+## 사용한 기술
+- React
+- Typescript
+- Vite
+- React Query
+- Zustand
+- Sass(module)
+
+### API 출처
+#### naver map API
+https://navermaps.github.io/maps.js.ncp/docs/index.html
+
+#### Camping API
+https://www.data.go.kr/data/15101933/openapi.do
+
+
+----------------------------------------------
+
 # React + TypeScript + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
@@ -6,25 +33,3 @@ Currently, two official plugins are available:
 
 - [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
 - [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
-
-- Configure the top-level `parserOptions` property like this:
-
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json', './tsconfig.app.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
-```
-
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
