@@ -1,7 +1,6 @@
-import { ChangeEvent, useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import Marker from "./Marker/Marker";
 import ReactDOMServer from "react-dom/server";
-import Input from "../UI/Input/Input";
 import Button from "../UI/Button/Button";
 import styles from "./Map.module.scss";
 import classNames from "classnames/bind";
@@ -15,8 +14,6 @@ const cx = classNames.bind(styles);
 const Map = () => {
   const { naver } = window;
 
-  const [map, setMap] = useState<naver.maps.Map | null>(null);
-
   const mapElement = useRef<HTMLDivElement>(null);
   const mapCenterRef = useRef<{ lat: number; lng: number }>({
     lat: 37.5665,
@@ -24,15 +21,8 @@ const Map = () => {
   });
   const mapZoomRef = useRef<IZoomLevel>(13);
 
-  const {
-    lat,
-    lng,
-    locationKeyword,
-    setLat,
-    setLng,
-    setLocationKeyword,
-    setZoomLevel,
-  } = useLocationStore();
+  const { lat, lng, map, setLat, setLng, setZoomLevel, setMap } =
+    useLocationStore();
 
   const { locationBasedList, isPossibleGetData, loadMoreData } =
     useLocationList();
@@ -164,53 +154,23 @@ const Map = () => {
     setZoomLevel(zoomLevel);
   }, []);
 
-  const searchLocationKeyword = useCallback(() => {
-    if (!naver || !map) return;
-
-    naver.maps.Service.geocode(
-      { query: locationKeyword },
-      (status, response) => {
-        if (status === naver.maps.Service.Status.ERROR) {
-          return alert("Something wrong!");
-        }
-
-        const responseAddress = response.v2.addresses[0];
-
-        const newCenter = {
-          lat: Number(responseAddress.x),
-          lng: Number(responseAddress.y),
-        };
-
-        map.setCenter(new naver.maps.LatLng(newCenter.lng, newCenter.lat));
-        setLat(newCenter.lat);
-        setLng(newCenter.lng);
-      }
-    );
-  }, [naver, map, locationKeyword]);
-
-  const handleChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
-    setLocationKeyword(e.target.value);
-  }, []);
-
   return (
     <div className={cx("container")}>
-      <div className={cx("search-container")}>
-        <Input
-          placeholder="지역 검색"
-          value={locationKeyword}
-          onChange={handleChange}
-        />
-        <Button size="small" onClick={searchLocationKeyword}>
-          검색
-        </Button>
-      </div>
-
       <div ref={mapElement} style={{ width: "100%", height: "500px" }} />
 
-      <button onClick={getLocationBasedData}>Update Center</button>
-      <button onClick={loadMoreData} disabled={!isPossibleGetData}>
-        Load More
-      </button>
+      <div className={cx("feature-buttons")}>
+        <Button onClick={getLocationBasedData} size="small">
+          현 지도에서 검색
+        </Button>
+
+        <Button
+          onClick={loadMoreData}
+          disabled={!isPossibleGetData}
+          size="small"
+        >
+          더 불러오기
+        </Button>
+      </div>
     </div>
   );
 };
