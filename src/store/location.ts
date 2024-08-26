@@ -6,10 +6,12 @@ interface LocationStore {
   lng: number;
   locationKeyword: string;
   zoomLevel: IZoomLevel;
+  map: naver.maps.Map | null;
   setLat: (newLat: number) => void;
   setLng: (newLng: number) => void;
   setLocationKeyword: (newKeyword: string) => void;
   setZoomLevel: (newZoomLevel: IZoomLevel) => void;
+  setMap: (newMap: naver.maps.Map) => void;
 }
 
 export const useLocationStore = create<LocationStore>((set) => ({
@@ -17,6 +19,7 @@ export const useLocationStore = create<LocationStore>((set) => ({
   lng: 126.978,
   locationKeyword: "",
   zoomLevel: 13,
+  map: null,
   setLat: (newLat: number) => set({ lat: newLat }),
   setLng: (newLng: number) =>
     set({
@@ -29,5 +32,9 @@ export const useLocationStore = create<LocationStore>((set) => ({
   setZoomLevel: (newZoomLevel: IZoomLevel) =>
     set({
       zoomLevel: newZoomLevel,
+    }),
+  setMap: (newMap: naver.maps.Map) =>
+    set({
+      map: newMap,
     }),
 }));

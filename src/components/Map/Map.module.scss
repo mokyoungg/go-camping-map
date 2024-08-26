@@ -1,5 +1,32 @@
+@import "../../styles/utils";
+
 .container {
-  .search-container {
+  width: 100%;
+  height: rem(500);
+  position: relative;
+
+  .buttons-box {
     display: flex;
+    align-items: center;
+    gap: rem(12);
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translate(-50%, 10%);
+    z-index: 1;
+
+    .feature-button {
+      background-color: var(--white);
+      border-radius: 8px;
+      font: var(--h4);
+      height: rem(32);
+      padding: rem(0) rem(10);
+      color: var(--green1);
+
+      &:disabled {
+        color: var(--white);
+        background-color: var(--gray3);
+      }
+    }
   }
 }

@@ -1,11 +1,14 @@
 @import "../../styles/utils";
 
+$map-height: rem(500);
+$searchbar-height: rem(52);
+
 .container {
+  width: 100%;
+  height: calc(100vh - #{$map-height} - #{$searchbar-height});
   display: flex;
   flex-direction: column;
   gap: rem(6);
   padding: rem(12);
-  overflow-y: auto;
-  width: 100%;
-  height: 100%;
+  overflow-y: scroll;
 }
