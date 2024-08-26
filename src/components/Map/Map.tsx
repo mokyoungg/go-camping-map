@@ -158,18 +158,18 @@ const Map = () => {
     <div className={cx("container")}>
       <div ref={mapElement} style={{ width: "100%", height: "500px" }} />
 
-      <div className={cx("feature-buttons")}>
-        <Button onClick={getLocationBasedData} size="small">
+      <div className={cx("buttons-box")}>
+        <button onClick={getLocationBasedData} className={cx("feature-button")}>
           현 지도에서 검색
-        </Button>
+        </button>
 
-        <Button
+        <button
           onClick={loadMoreData}
           disabled={!isPossibleGetData}
-          size="small"
+          className={cx("feature-button")}
         >
           더 불러오기
-        </Button>
+        </button>
       </div>
     </div>
   );
