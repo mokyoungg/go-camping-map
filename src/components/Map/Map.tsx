@@ -1,13 +1,4 @@
-import {
-  ChangeEvent,
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
-import { useInfiniteQuery } from "@tanstack/react-query";
-import { getLocationBasedList } from "../../api/camping";
+import { ChangeEvent, useCallback, useEffect, useRef, useState } from "react";
 import Marker from "./Marker/Marker";
 import ReactDOMServer from "react-dom/server";
 import Input from "../UI/Input/Input";
@@ -15,62 +6,36 @@ import Button from "../UI/Button/Button";
 import styles from "./Map.module.scss";
 import classNames from "classnames/bind";
 import { ICampItem } from "../../type/camping";
+import { useLocationStore } from "../../store/location";
+import useLocationList from "../../hooks/useLocationList";
+import { IZoomLevel } from "../../type/camping";
 
 const cx = classNames.bind(styles);
-
-const ZOOM_LEVEL = {
-  11: 20000,
-  12: 10000,
-  13: 5000,
-  14: 3000,
-  15: 1000,
-} as const;
 
 const Map = () => {
   const { naver } = window;
 
   const [map, setMap] = useState<naver.maps.Map | null>(null);
-  const [lat, setLat] = useState<number>(37.5665);
-  const [lng, setLng] = useState<number>(126.978);
-  const [locationKeyword, setLocationKeyword] = useState<string>("");
-  const [zoomLevel, setZoomLevel] = useState<keyof typeof ZOOM_LEVEL>(13);
 
   const mapElement = useRef<HTMLDivElement>(null);
   const mapCenterRef = useRef<{ lat: number; lng: number }>({
     lat: 37.5665,
     lng: 126.978,
   });
-  const mapZoomRef = useRef<keyof typeof ZOOM_LEVEL>(13);
+  const mapZoomRef = useRef<IZoomLevel>(13);
 
-  const { data, fetchNextPage, hasNextPage, isFetching } = useInfiniteQuery({
-    queryKey: ["location-list", lat, lng, zoomLevel],
-    queryFn: ({ pageParam }) =>
-      getLocationBasedList({
-        pageNo: pageParam,
-        mapX: lat.toString(),
-        mapY: lng.toString(),
-        radius: ZOOM_LEVEL[zoomLevel].toString(),
-      }),
-    initialPageParam: 1,
-    getNextPageParam: (lastPage, pages) => {
-      const totalPages = Math.ceil(lastPage.totalCount / lastPage.numOfRows);
-      const nextPage = pages.length + 1;
+  const {
+    lat,
+    lng,
+    locationKeyword,
+    setLat,
+    setLng,
+    setLocationKeyword,
+    setZoomLevel,
+  } = useLocationStore();
 
-      return nextPage <= totalPages ? nextPage : undefined;
-    },
-  });
-
-  const locationBasedList = useMemo(() => {
-    if (!data?.pages) return [];
-
-    return data.pages.reduce((acc: ICampItem[], cur) => {
-      if (cur?.items?.item) {
-        return acc.concat(cur.items.item);
-      }
-
-      return acc;
-    }, []);
-  }, [data]);
+  const { locationBasedList, isPossibleGetData, loadMoreData } =
+    useLocationList();
 
   // Initialize map
   useEffect(() => {
@@ -115,7 +80,7 @@ const Map = () => {
     naver.maps.Event.addListener(map, "zoom_changed", () => {
       const zoomLevel = map.getZoom();
 
-      mapZoomRef.current = zoomLevel as keyof typeof ZOOM_LEVEL;
+      mapZoomRef.current = zoomLevel as IZoomLevel;
     });
   }, [naver, map]);
 
@@ -243,7 +208,7 @@ const Map = () => {
       <div ref={mapElement} style={{ width: "100%", height: "500px" }} />
 
       <button onClick={getLocationBasedData}>Update Center</button>
-      <button onClick={() => fetchNextPage()} disabled={!hasNextPage}>
+      <button onClick={loadMoreData} disabled={!isPossibleGetData}>
         Load More
       </button>
     </div>

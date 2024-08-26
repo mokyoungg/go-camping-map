@@ -89,3 +89,13 @@ export interface IImageItem {
   createdtime: "string";
   modifiedtime: "string";
 }
+
+export const ZOOM_LEVEL = {
+  11: 20000,
+  12: 10000,
+  13: 5000,
+  14: 3000,
+  15: 1000,
+} as const;
+
+export type IZoomLevel = keyof typeof ZOOM_LEVEL;
