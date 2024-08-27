@@ -20,6 +20,7 @@ const CampingListItem = (props: CampingListItemProps) => {
     posblFcltyCl,
     sbrsCl,
     themaEnvrnCl,
+    firstImageUrl,
   } = data;
 
   return (
@@ -37,7 +38,12 @@ const CampingListItem = (props: CampingListItemProps) => {
         </div>
       </div>
 
-      {intro && <div className={cx("intro")}>{intro}</div>}
+      {/* {intro && <div className={cx("intro")}>{intro}</div>} */}
+      {firstImageUrl && (
+        <div className={cx("img-container")}>
+          <img src={firstImageUrl} alt="img" />
+        </div>
+      )}
 
       <div className={cx("sub-info")}>
         {posblFcltyCl && (

@@ -7,6 +7,7 @@ import { ICampItem } from "../../type/camping";
 import { useLocationStore } from "../../store/location";
 import useLocationList from "../../hooks/useLocationList";
 import { IZoomLevel } from "../../type/camping";
+import { useLayoutStore } from "../../store/layout";
 
 const cx = classNames.bind(styles);
 
@@ -19,6 +20,8 @@ const Map = () => {
     lng: 126.978,
   });
   const mapZoomRef = useRef<IZoomLevel>(13);
+
+  const { isListOpen, openList, closeList } = useLayoutStore();
 
   const { lat, lng, map, setLat, setLng, setZoomLevel, setMap } =
     useLocationStore();
@@ -153,9 +156,21 @@ const Map = () => {
     setZoomLevel(zoomLevel);
   }, []);
 
+  const handleListOpen = useCallback(() => {
+    if (isListOpen) {
+      closeList();
+    } else {
+      openList();
+    }
+  }, [isListOpen]);
+
   return (
     <div className={cx("container")}>
-      <div ref={mapElement} style={{ width: "100%", height: "500px" }} />
+      <div ref={mapElement} style={{ width: "100%", height: "100%" }} />
+
+      <button className={cx("list-button")} onClick={handleListOpen}>
+        {isListOpen ? "<" : "> 리스트 보기"}
+      </button>
 
       <div className={cx("buttons-box")}>
         <button onClick={getLocationBasedData} className={cx("feature-button")}>
