@@ -14,8 +14,11 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <div className={cx("container")}>
         <SearchBar />
-        <Map />
-        <CampingList />
+
+        <div className={cx("main")}>
+          <CampingList />
+          <Map />
+        </div>
       </div>
     </QueryClientProvider>
   );

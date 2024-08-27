@@ -155,7 +155,7 @@ const Map = () => {
 
   return (
     <div className={cx("container")}>
-      <div ref={mapElement} style={{ width: "100%", height: "500px" }} />
+      <div ref={mapElement} style={{ width: "100%", height: "100%" }} />
 
       <div className={cx("buttons-box")}>
         <button onClick={getLocationBasedData} className={cx("feature-button")}>

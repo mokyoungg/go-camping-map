@@ -8,8 +8,6 @@ const cx = classNames.bind(styles);
 const CampingList = () => {
   const { locationBasedList } = useLocationList();
 
-  console.log("lo :", locationBasedList);
-
   return (
     <ul className={cx("container")}>
       {locationBasedList.map((item) => (
