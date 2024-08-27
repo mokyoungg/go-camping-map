@@ -14,15 +14,19 @@ const CampingList = () => {
 
   return (
     <>
-      {isListOpen ? (
-        <ul className={cx("container")}>
-          {locationBasedList.map((item) => (
-            <li key={item.contentId}>
-              <CampingListItem data={item} />
-            </li>
-          ))}
-        </ul>
-      ) : null}
+      {/* {isListOpen ? ( */}
+      <ul
+        className={cx("container", {
+          "container--open": isListOpen,
+        })}
+      >
+        {locationBasedList.map((item) => (
+          <li key={item.contentId}>
+            <CampingListItem data={item} />
+          </li>
+        ))}
+      </ul>
+      {/* ) : null} */}
     </>
   );
 };
