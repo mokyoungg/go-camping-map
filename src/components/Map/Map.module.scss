@@ -29,4 +29,18 @@
       }
     }
   }
+
+  .list-button {
+    position: absolute;
+    top: 0;
+    left: 3%;
+    transform: translate(-3%, 10%);
+    z-index: 1;
+    background-color: var(--white);
+    border-radius: 8px;
+    font: var(--h4);
+    height: rem(32);
+    padding: rem(0) rem(10);
+    color: var(--green1);
+  }
 }
