@@ -168,11 +168,9 @@ const Map = () => {
     <div className={cx("container")}>
       <div ref={mapElement} style={{ width: "100%", height: "100%" }} />
 
-      {locationBasedList.length > 0 && (
-        <button className={cx("list-button")} onClick={handleListOpen}>
-          {isListOpen ? "<" : "> 리스트 보기"}
-        </button>
-      )}
+      <button className={cx("list-button")} onClick={handleListOpen}>
+        {isListOpen ? "<" : "> 리스트 보기"}
+      </button>
 
       <div className={cx("buttons-box")}>
         <button onClick={getLocationBasedData} className={cx("feature-button")}>
