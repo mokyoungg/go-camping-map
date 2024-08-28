@@ -3,6 +3,7 @@ import classNames from "classnames/bind";
 import CampingListItem from "./CampingListItem/CampingListItem";
 import useLocationList from "../../hooks/useLocationList";
 import { useLayoutStore } from "../../store/layout";
+import CampingInfo from "../CampingInfo/CampingInfo";
 
 const cx = classNames.bind(styles);
 
@@ -10,19 +11,29 @@ const CampingList = () => {
   const { locationBasedList } = useLocationList();
   const { isListOpen } = useLayoutStore();
 
-  console.log("is L :", isListOpen);
-
   return (
     <>
-      {isListOpen ? (
-        <ul className={cx("container")}>
+      <div className={cx("container")}>
+        <ul
+          className={cx("list", {
+            "list--open": isListOpen,
+          })}
+        >
           {locationBasedList.map((item) => (
             <li key={item.contentId}>
               <CampingListItem data={item} />
             </li>
           ))}
         </ul>
-      ) : null}
+
+        {/* <div
+          className={cx("pannel", {
+            "pannel--open": isDetailPannelOpen,
+          })}
+        > */}
+        <CampingInfo />
+        {/* </div> */}
+      </div>
     </>
   );
 };

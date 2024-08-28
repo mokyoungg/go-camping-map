@@ -1,6 +1,9 @@
 import { ICampItem } from "../../../type/camping";
 import styles from "./CampingListItem.module.scss";
 import classNames from "classnames/bind";
+import { useCampingStore } from "../../../store/camping";
+import { useLayoutStore } from "../../../store/layout";
+import { useCallback } from "react";
 
 const cx = classNames.bind(styles);
 
@@ -11,10 +14,12 @@ interface CampingListItemProps {
 const CampingListItem = (props: CampingListItemProps) => {
   const { data } = props;
 
+  const { selectItem } = useCampingStore();
+  const { openDetailPannel } = useLayoutStore();
+
   const {
     facltNm,
     addr1,
-    intro,
     homepage,
     tel,
     posblFcltyCl,
@@ -23,8 +28,13 @@ const CampingListItem = (props: CampingListItemProps) => {
     firstImageUrl,
   } = data;
 
+  const handleListItem = useCallback(() => {
+    selectItem(data);
+    openDetailPannel();
+  }, [data]);
+
   return (
-    <div className={cx("container")}>
+    <div className={cx("container")} onClick={handleListItem}>
       <div className={cx("main-info")}>
         <div className={cx("infos")}>
           <div className={cx("name")}>{facltNm}</div>
@@ -38,7 +48,6 @@ const CampingListItem = (props: CampingListItemProps) => {
         </div>
       </div>
 
-      {/* {intro && <div className={cx("intro")}>{intro}</div>} */}
       {firstImageUrl && (
         <div className={cx("img-container")}>
           <img src={firstImageUrl} alt="img" />
