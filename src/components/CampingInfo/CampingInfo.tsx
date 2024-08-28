@@ -3,18 +3,12 @@ import classNames from "classnames/bind";
 import CampingImage from "./CampingImage/CampingImage";
 import { useLayoutStore } from "../../store/layout";
 import { useCampingStore } from "../../store/camping";
-import { useCallback } from "react";
 
 const cx = classNames.bind(styles);
 
 const CampingInfo = () => {
   const { isDetailPannelOpen, closeDetailPannel } = useLayoutStore();
-  const { selectedItem, resetItem } = useCampingStore();
-
-  const handleClose = useCallback(() => {
-    resetItem();
-    closeDetailPannel();
-  }, []);
+  const { selectedItem } = useCampingStore();
 
   return (
     <>
@@ -28,7 +22,10 @@ const CampingInfo = () => {
             <div className={cx("header")}>
               <div className={cx("title")}>{selectedItem.facltNm}</div>
 
-              <button className={cx("close-button")} onClick={handleClose}>
+              <button
+                className={cx("close-button")}
+                onClick={closeDetailPannel}
+              >
                 X
               </button>
             </div>

@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { useCampingStore } from "./camping";
 
 interface LayoutStore {
   isListOpen: boolean;
@@ -16,10 +17,22 @@ export const useLayoutStore = create<LayoutStore>((set) => ({
     set({
       isListOpen: true,
     }),
-  closeList: () =>
+  closeList: () => {
+    const resetItem = useCampingStore.getState().resetItem;
+    resetItem();
+
     set({
+      isDetailPannelOpen: false,
       isListOpen: false,
-    }),
-  openDetailPannel: () => set({ isDetailPannelOpen: true }),
-  closeDetailPannel: () => set({ isDetailPannelOpen: false }),
+    });
+  },
+  openDetailPannel: () => {
+    set({ isDetailPannelOpen: true });
+  },
+  closeDetailPannel: () => {
+    const resetItem = useCampingStore.getState().resetItem;
+    resetItem();
+
+    set({ isDetailPannelOpen: false });
+  },
 }));
