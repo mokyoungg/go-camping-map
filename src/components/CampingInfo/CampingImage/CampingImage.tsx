@@ -7,43 +7,58 @@ import { Navigation } from "swiper/modules";
 import "swiper/scss";
 import "swiper/scss/navigation";
 import { useMemo } from "react";
+import { useCampingStore } from "../../../store/camping";
 
 const cx = classNames.bind(styles);
 
 const CampingImage = () => {
+  const { selectedItem } = useCampingStore();
+
   const { data: imageData } = useQuery({
-    queryKey: ["image"],
-    queryFn: () => getImageList({ pageNo: 1, contentId: "100006" }),
+    queryKey: ["image", selectedItem],
+    queryFn: () =>
+      getImageList({ pageNo: 1, contentId: selectedItem?.contentId || "" }),
+    enabled: selectedItem?.contentId ? true : false,
   });
 
   const images = useMemo(
     () =>
-      imageData?.items.item.map((item) => {
-        return {
-          serialnum: item.serialnum,
-          imageUrl: item.imageUrl,
-        };
-      }),
+      imageData
+        ? imageData?.items.item.map((item) => {
+            return {
+              serialnum: item.serialnum,
+              imageUrl: item.imageUrl,
+            };
+          })
+        : [],
     [imageData]
   );
 
   return (
-    <div className={cx("container")}>
-      <Swiper
-        style={{ height: "100%" }}
-        navigation={true}
-        modules={[Navigation]}
-      >
-        {images &&
-          images.map((image) => (
-            <SwiperSlide key={image.serialnum}>
-              <div className={cx("image-wrapper")}>
-                <img className={cx("image")} src={image.imageUrl} alt="img" />
-              </div>
-            </SwiperSlide>
-          ))}
-      </Swiper>
-    </div>
+    <>
+      {images.length > 0 ? (
+        <div className={cx("container")}>
+          <Swiper
+            style={{ height: "100%" }}
+            navigation={true}
+            modules={[Navigation]}
+          >
+            {images &&
+              images.map((image) => (
+                <SwiperSlide key={image.serialnum}>
+                  <div className={cx("image-wrapper")}>
+                    <img
+                      className={cx("image")}
+                      src={image.imageUrl}
+                      alt="img"
+                    />
+                  </div>
+                </SwiperSlide>
+              ))}
+          </Swiper>
+        </div>
+      ) : null}
+    </>
   );
 };
 

@@ -5,15 +5,11 @@ import useLocationList from "../../hooks/useLocationList";
 import { useLayoutStore } from "../../store/layout";
 import CampingInfo from "../CampingInfo/CampingInfo";
 
-import { useState } from "react";
-
 const cx = classNames.bind(styles);
 
 const CampingList = () => {
   const { locationBasedList } = useLocationList();
   const { isListOpen } = useLayoutStore();
-
-  const [isOpen, setIsOpen] = useState(false);
 
   return (
     <>
@@ -23,7 +19,6 @@ const CampingList = () => {
             "list--open": isListOpen,
           })}
         >
-          <button onClick={() => setIsOpen(!isOpen)}>hi</button>
           {locationBasedList.map((item) => (
             <li key={item.contentId}>
               <CampingListItem data={item} />
@@ -31,13 +26,13 @@ const CampingList = () => {
           ))}
         </ul>
 
-        <div
+        {/* <div
           className={cx("pannel", {
-            "pannel--open": isOpen,
+            "pannel--open": isDetailPannelOpen,
           })}
-        >
-          <CampingInfo closePannel={() => setIsOpen(false)} />
-        </div>
+        > */}
+        <CampingInfo />
+        {/* </div> */}
       </div>
     </>
   );
