@@ -49,8 +49,7 @@
     color: var(--green1);
 
     &--right {
-      left: 35%;
-      transform: translate(-35%, 10%);
+      left: rem(380);
     }
   }
 }
