@@ -23,7 +23,7 @@ const CampingImage = () => {
 
   const images = useMemo(
     () =>
-      imageData
+      imageData && imageData.items.item
         ? imageData?.items.item.map((item) => {
             return {
               serialnum: item.serialnum,
