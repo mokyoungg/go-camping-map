@@ -15,11 +15,8 @@ const CampingList = () => {
 
   const [isOpen, setIsOpen] = useState(false);
 
-  console.log("l :", locationBasedList);
-
   return (
     <>
-      {/* {isListOpen ? ( */}
       <div className={cx("container")}>
         <ul
           className={cx("list", {
@@ -39,10 +36,9 @@ const CampingList = () => {
             "pannel--open": isOpen,
           })}
         >
-          <CampingInfo />
+          <CampingInfo closePannel={() => setIsOpen(false)} />
         </div>
       </div>
-      {/* ) : null} */}
     </>
   );
 };
