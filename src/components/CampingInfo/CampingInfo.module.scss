@@ -5,89 +5,85 @@ $searchbar-height: rem(52);
 .pannel {
   width: rem(350);
   height: calc(100vh - #{$searchbar-height});
+  margin-top: rem(15);
   position: absolute;
   background-color: var(--white);
   transform: translateX(-100%);
   transition: transform 0.3s ease-in-out;
   z-index: 10;
+  top: 0;
 
   &--open {
-    transform: translateX(105%);
+    transform: translateX(120%);
   }
 
   .container {
     width: 100%;
     height: 100%;
-    padding: rem(12);
     display: flex;
     flex-direction: column;
-    gap: rem(12);
     overflow-y: scroll;
+    position: relative;
+
+    .close-button {
+      position: absolute;
+      font: var(--h2);
+      color: var(--gray4);
+      z-index: 20;
+      top: 1%;
+      right: 3%;
+    }
 
     .header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+      padding: rem(16);
 
-      .title {
-        font: var(--h2);
+      .title-info {
+        display: flex;
+        align-items: center;
+        gap: rem(12);
+
+        .title {
+          font: var(--h2);
+        }
+
+        .induty {
+          font: var(--body4);
+          color: var(--gray3);
+        }
       }
 
-      .close-button {
-        font: var(--h2);
+      .line-intro {
+        font: var(--caption1);
+        color: var(--gray2);
       }
     }
 
-    .info-container {
+    .reserve-info {
+      border-top: rem(5) solid var(--gray4);
       display: flex;
       flex-direction: column;
-      gap: rem(12);
+      gap: rem(6);
+      padding: rem(16);
+      font: var(--body4);
 
-      .info {
-        display: flex;
-        flex-direction: column;
+      .homepage {
+        color: var(--green1);
+      }
+    }
 
-        .address {
-          font: var(--body4);
-        }
+    .info {
+      border-top: rem(5) solid var(--gray4);
+      display: flex;
+      flex-direction: column;
+      gap: rem(6);
+      padding: rem(16);
 
-        .reserve {
-          display: flex;
-          gap: rem(8);
-          font: var(--caption1);
-        }
+      .title {
+        font: var(--h3);
       }
 
-      .intro {
-        display: flex;
-        flex-direction: column;
-        gap: rem(6);
-        border-top: rem(1) solid var(--gray2);
-        padding-top: rem(12);
-
-        .title {
-          font: var(--h2);
-        }
-
-        .content {
-          font: var(--body4);
-        }
-      }
-
-      .sub-info {
-        display: flex;
-        flex-direction: column;
-        gap: rem(6);
-        border-top: rem(1) solid var(--gray2);
-        padding-top: rem(12);
-
-        .title {
-          font: var(--h2);
-        }
-
-        .facility {
-          font: var(--caption1);
-        }
+      .content {
+        font: var(--caption1);
       }
     }
   }

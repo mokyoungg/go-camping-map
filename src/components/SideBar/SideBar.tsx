@@ -5,6 +5,7 @@ import SearchBar from "../SearchBar/SearchBar";
 import CampingList from "../CampingList/CampingList";
 import { useLayoutStore } from "../../store/layout";
 import { useCallback } from "react";
+import CampingInfo from "../CampingInfo/CampingInfo";
 
 const cx = classNames.bind(styles);
 
@@ -22,7 +23,10 @@ const SideBar = () => {
   return (
     <div className={cx("container", { "container--open": isListOpen })}>
       <SearchBar />
+
       <CampingList />
+
+      <CampingInfo />
 
       <button className={cx("handler")} onClick={handleSideBar}>
         {isListOpen ? "<" : ">"}
