@@ -6,22 +6,22 @@ $searchbar-height: rem(52);
   position: relative;
 
   .list {
-    width: rem(350);
+    width: 100%;
     height: calc(100vh - #{$searchbar-height});
     display: flex;
     flex-direction: column;
     gap: rem(6);
     padding: rem(12);
     overflow-y: scroll;
-    z-index: 20;
-    position: absolute;
-    background-color: var(--white);
-    transform: translateX(-100%);
-    transition: transform 0.3s ease-in-out;
+    // z-index: 20;
+    // position: absolute;
+    // background-color: var(--white);
+    // transform: translateX(-100%);
+    // transition: transform 0.3s ease-in-out;
 
-    &--open {
-      transform: translate(0%);
-    }
+    // &--open {
+    // transform: translate(0%);
+    // }
   }
 
   .pannel {
