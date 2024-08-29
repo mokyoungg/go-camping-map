@@ -14,19 +14,13 @@ const CampingList = () => {
       <div className={cx("container")}>
         <ul className={cx("list")}>
           {locationBasedList.map((item) => (
-            <li key={item.contentId}>
+            <li key={item.contentId} className={cx("list-item")}>
               <CampingListItem data={item} />
             </li>
           ))}
         </ul>
 
-        {/* <div
-          className={cx("pannel", {
-            "pannel--open": isDetailPannelOpen,
-          })}
-        > */}
         <CampingInfo />
-        {/* </div> */}
       </div>
     </>
   );

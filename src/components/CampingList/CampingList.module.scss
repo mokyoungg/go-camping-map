@@ -10,9 +10,11 @@ $searchbar-height: rem(74);
     height: calc(100vh - #{$searchbar-height});
     display: flex;
     flex-direction: column;
-    gap: rem(6);
-    padding: rem(12);
     overflow-y: scroll;
+
+    .list-item {
+      border-top: 1px solid var(--gray4);
+    }
   }
 
   .pannel {
