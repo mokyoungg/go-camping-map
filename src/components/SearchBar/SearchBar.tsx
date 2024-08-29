@@ -3,12 +3,14 @@ import classNames from "classnames/bind";
 import Input from "../UI/Input/Input";
 import { useLocationStore } from "../../store/location";
 import { useCallback, ChangeEvent, KeyboardEvent } from "react";
+import { useLayoutStore } from "../../store/layout";
 
 const cx = classNames.bind(styles);
 
 const SearchBar = () => {
   const { map, locationKeyword, setLat, setLng, setLocationKeyword } =
     useLocationStore();
+  const { closeDetailPannel } = useLayoutStore();
 
   const searchLocationKeyword = useCallback(() => {
     const { naver } = window;
@@ -32,9 +34,11 @@ const SearchBar = () => {
         map.setCenter(new naver.maps.LatLng(newCenter.lng, newCenter.lat));
         setLat(newCenter.lat);
         setLng(newCenter.lng);
+
+        closeDetailPannel();
       }
     );
-  }, [naver, map, locationKeyword]);
+  }, [naver, map, locationKeyword, closeDetailPannel]);
 
   const handleChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
     setLocationKeyword(e.target.value);

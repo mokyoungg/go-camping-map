@@ -11,7 +11,7 @@ interface LayoutStore {
 }
 
 export const useLayoutStore = create<LayoutStore>((set) => ({
-  isListOpen: false,
+  isListOpen: true,
   isDetailPannelOpen: false,
   openList: () =>
     set({
