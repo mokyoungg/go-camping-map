@@ -41,7 +41,13 @@ const CampingInfo = () => {
             <div className={cx("reserve-info")}>
               <div className={cx("address")}>{selectedItem.addr1}</div>
               <div className={cx("tel")}>{selectedItem.tel}</div>
-              <a className={cx("homepage")}>{selectedItem.homepage}</a>
+              <a
+                className={cx("homepage")}
+                href={selectedItem.homepage}
+                target="_blank"
+              >
+                {selectedItem.homepage}
+              </a>
             </div>
 
             {selectedItem.intro && (
