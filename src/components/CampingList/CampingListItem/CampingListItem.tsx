@@ -17,16 +17,8 @@ const CampingListItem = (props: CampingListItemProps) => {
   const { selectItem } = useCampingStore();
   const { openDetailPannel } = useLayoutStore();
 
-  const {
-    facltNm,
-    addr1,
-    homepage,
-    tel,
-    posblFcltyCl,
-    sbrsCl,
-    themaEnvrnCl,
-    firstImageUrl,
-  } = data;
+  const { facltNm, addr1, posblFcltyCl, sbrsCl, themaEnvrnCl, firstImageUrl } =
+    data;
 
   const handleListItem = useCallback(() => {
     selectItem(data);
@@ -35,17 +27,9 @@ const CampingListItem = (props: CampingListItemProps) => {
 
   return (
     <div className={cx("container")} onClick={handleListItem}>
-      <div className={cx("main-info")}>
-        <div className={cx("infos")}>
-          <div className={cx("name")}>{facltNm}</div>
-          <div className={cx("address")}>{addr1}</div>
-        </div>
-        <div className={cx("detail-infos")}>
-          <div className={cx("tel")}>{tel}</div>
-          <a className={cx("homepage")} href={homepage}>
-            {homepage}
-          </a>
-        </div>
+      <div className={cx("infos")}>
+        <div className={cx("name")}>{facltNm}</div>
+        <div className={cx("address")}>{addr1}</div>
       </div>
 
       {firstImageUrl && (
@@ -55,13 +39,9 @@ const CampingListItem = (props: CampingListItemProps) => {
       )}
 
       <div className={cx("sub-info")}>
-        {posblFcltyCl && (
-          <div className={cx("chip", "chip--green")}>{posblFcltyCl}</div>
-        )}
-        {sbrsCl && <div className={cx("chip", "chip--yellow")}>{sbrsCl}</div>}
-        {themaEnvrnCl && (
-          <div className={cx("chip", "chip--blue")}>{themaEnvrnCl}</div>
-        )}
+        {posblFcltyCl && <div className={cx("chip")}>{posblFcltyCl}</div>}
+        {sbrsCl && <div className={cx("chip")}>{sbrsCl}</div>}
+        {themaEnvrnCl && <div className={cx("chip")}>{themaEnvrnCl}</div>}
       </div>
     </div>
   );

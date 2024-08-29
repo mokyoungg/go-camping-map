@@ -1,40 +1,48 @@
 @import "../../styles/utils";
 
-$searchbar-height: rem(52);
+$searchbar-height: rem(74);
 
 .container {
   position: relative;
 
   .list {
-    width: rem(350);
+    width: 100%;
     height: calc(100vh - #{$searchbar-height});
     display: flex;
     flex-direction: column;
-    gap: rem(6);
-    padding: rem(12);
     overflow-y: scroll;
-    z-index: 20;
-    position: absolute;
-    background-color: var(--white);
-    transform: translateX(-100%);
-    transition: transform 0.3s ease-in-out;
 
-    &--open {
-      transform: translate(0%);
+    .list-item {
+      border-top: 1px solid var(--gray4);
     }
   }
 
-  .pannel {
-    width: rem(350);
+  .notice {
+    width: 100%;
     height: calc(100vh - #{$searchbar-height});
-    position: absolute;
-    background-color: var(--white);
-    transform: translateX(-100%);
-    transition: transform 0.3s ease-in-out;
-    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    gap: rem(12);
+    overflow-y: scroll;
+    padding: rem(15) rem(25);
 
-    &--open {
-      transform: translateX(105%);
+    .img-wrapper {
+      width: 100%;
+      height: rem(400);
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 5px;
+      }
+    }
+
+    .content {
+      display: flex;
+      justify-content: center;
+      font: var(--h2);
+      color: var(--gray2);
     }
   }
 }

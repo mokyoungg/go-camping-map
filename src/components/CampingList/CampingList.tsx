@@ -2,37 +2,35 @@ import styles from "./CampingList.module.scss";
 import classNames from "classnames/bind";
 import CampingListItem from "./CampingListItem/CampingListItem";
 import useLocationList from "../../hooks/useLocationList";
-import { useLayoutStore } from "../../store/layout";
-import CampingInfo from "../CampingInfo/CampingInfo";
+import NoticeImg from "../../assets/image/notice.jpg";
 
 const cx = classNames.bind(styles);
 
 const CampingList = () => {
   const { locationBasedList } = useLocationList();
-  const { isListOpen } = useLayoutStore();
 
   return (
     <>
       <div className={cx("container")}>
-        <ul
-          className={cx("list", {
-            "list--open": isListOpen,
-          })}
-        >
-          {locationBasedList.map((item) => (
-            <li key={item.contentId}>
-              <CampingListItem data={item} />
-            </li>
-          ))}
-        </ul>
+        {locationBasedList.length > 0 ? (
+          <ul className={cx("list")}>
+            {locationBasedList.map((item) => (
+              <li key={item.contentId} className={cx("list-item")}>
+                <CampingListItem data={item} />
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <div className={cx("notice")}>
+            <div className={cx("img-wrapper")}>
+              <img src={NoticeImg} alt="camp" />
+            </div>
 
-        {/* <div
-          className={cx("pannel", {
-            "pannel--open": isDetailPannelOpen,
-          })}
-        > */}
-        <CampingInfo />
-        {/* </div> */}
+            <div className={cx("content")}>
+              지명을 검색하거나 지도에서 검색해주세요.
+            </div>
+          </div>
+        )}
       </div>
     </>
   );

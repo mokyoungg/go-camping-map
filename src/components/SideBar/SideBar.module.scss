@@ -1,0 +1,35 @@
+@import "../../styles/utils";
+
+.container {
+  width: rem(390);
+  height: 100%;
+  position: absolute;
+  box-shadow: rgba(0, 0, 0, 0.2) 0px 4px 8px 0px;
+  left: 0;
+  top: 0;
+  z-index: 20;
+  background: var(--white);
+
+  transform: translateX(-100%);
+  transition: transform 0.3s ease-in-out;
+
+  &--open {
+    transform: translate(0%);
+  }
+
+  .handler {
+    position: absolute;
+    overflow: hidden;
+    z-index: 10;
+    top: 50%;
+    left: 100%;
+    width: 23px;
+    height: 46px;
+    border-radius: 0px 9px 9px 0px;
+    background-clip: padding-box;
+    transform: translateY(-50%);
+    background-color: var(--white);
+    color: var(--gray2);
+    font: var(--body2);
+  }
+}

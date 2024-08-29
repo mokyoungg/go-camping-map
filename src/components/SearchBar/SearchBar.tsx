@@ -1,15 +1,16 @@
 import styles from "./SearchBar.module.scss";
 import classNames from "classnames/bind";
 import Input from "../UI/Input/Input";
-import Button from "../UI/Button/Button";
 import { useLocationStore } from "../../store/location";
-import { useCallback, ChangeEvent } from "react";
+import { useCallback, ChangeEvent, KeyboardEvent } from "react";
+import { useLayoutStore } from "../../store/layout";
 
 const cx = classNames.bind(styles);
 
 const SearchBar = () => {
   const { map, locationKeyword, setLat, setLng, setLocationKeyword } =
     useLocationStore();
+  const { closeDetailPannel } = useLayoutStore();
 
   const searchLocationKeyword = useCallback(() => {
     const { naver } = window;
@@ -33,24 +34,34 @@ const SearchBar = () => {
         map.setCenter(new naver.maps.LatLng(newCenter.lng, newCenter.lat));
         setLat(newCenter.lat);
         setLng(newCenter.lng);
+
+        closeDetailPannel();
       }
     );
-  }, [naver, map, locationKeyword]);
+  }, [naver, map, locationKeyword, closeDetailPannel]);
 
   const handleChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
     setLocationKeyword(e.target.value);
   }, []);
 
+  const handleEnterKey = useCallback(
+    (e: KeyboardEvent<HTMLInputElement>) => {
+      if (e.key === "Enter") {
+        searchLocationKeyword();
+      }
+    },
+    [searchLocationKeyword]
+  );
+
   return (
     <div className={cx("container")}>
       <Input
+        className={cx("input")}
         placeholder="지역 검색"
         value={locationKeyword}
         onChange={handleChange}
+        onKeyDown={handleEnterKey}
       />
-      <Button size="small" onClick={searchLocationKeyword}>
-        검색
-      </Button>
     </div>
   );
 };
