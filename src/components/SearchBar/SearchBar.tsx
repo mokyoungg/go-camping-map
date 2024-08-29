@@ -1,9 +1,8 @@
 import styles from "./SearchBar.module.scss";
 import classNames from "classnames/bind";
 import Input from "../UI/Input/Input";
-import Button from "../UI/Button/Button";
 import { useLocationStore } from "../../store/location";
-import { useCallback, ChangeEvent } from "react";
+import { useCallback, ChangeEvent, KeyboardEvent } from "react";
 
 const cx = classNames.bind(styles);
 
@@ -41,16 +40,24 @@ const SearchBar = () => {
     setLocationKeyword(e.target.value);
   }, []);
 
+  const handleEnterKey = useCallback(
+    (e: KeyboardEvent<HTMLInputElement>) => {
+      if (e.key === "Enter") {
+        searchLocationKeyword();
+      }
+    },
+    [searchLocationKeyword]
+  );
+
   return (
     <div className={cx("container")}>
       <Input
+        className={cx("input")}
         placeholder="지역 검색"
         value={locationKeyword}
         onChange={handleChange}
+        onKeyDown={handleEnterKey}
       />
-      <Button size="small" onClick={searchLocationKeyword}>
-        검색
-      </Button>
     </div>
   );
 };
