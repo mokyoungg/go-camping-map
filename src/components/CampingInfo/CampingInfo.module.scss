@@ -4,7 +4,7 @@ $searchbar-height: rem(52);
 
 .pannel {
   width: rem(350);
-  height: calc(100vh - #{$searchbar-height});
+  height: calc(100dvh - #{$searchbar-height});
   margin-top: rem(15);
   position: absolute;
   background-color: var(--white);
