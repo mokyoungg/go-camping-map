@@ -8,14 +8,14 @@ $handle-height: rem(48);
 
   .list {
     width: 100%;
-    height: calc(100vh - #{$searchbar-height});
+    height: calc(100dvh - #{$searchbar-height});
     display: flex;
     flex-direction: column;
     overflow-y: scroll;
     // overflow: visible;
 
     @media screen and (max-width: 768px) {
-      height: calc(100vh - #{$searchbar-height} - #{$handle-height});
+      height: calc(100dvh - #{$searchbar-height} - #{$handle-height});
     }
 
     .list-item {
@@ -25,7 +25,7 @@ $handle-height: rem(48);
 
   .notice {
     width: 100%;
-    height: calc(100vh - #{$searchbar-height});
+    height: calc(100dvh - #{$searchbar-height});
     display: flex;
     flex-direction: column;
     gap: rem(12);
@@ -33,7 +33,7 @@ $handle-height: rem(48);
     padding: rem(15) rem(25);
 
     @media screen and (max-width: 768px) {
-      height: calc(100vh - #{$searchbar-height} - #{$handle-height});
+      height: calc(100dvh - #{$searchbar-height} - #{$handle-height});
     }
 
     .img-wrapper {
