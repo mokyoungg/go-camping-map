@@ -7,7 +7,7 @@ import { useRef, TouchEvent } from "react";
 const cx = classNames.bind(styles);
 
 // 설정할 최대, 최소 높이
-export const MIN_Y = 100; // 바텀시트가 최대로 높이 올라갔을 때의 y 값
+export const MIN_Y = window.innerHeight * 0.1; // 바텀시트가 최대로 높이 올라갔을 때의 y 값
 export const MAX_Y = window.innerHeight * 0.8; // 바텀시트가 최소로 내려갔을 때의 y 값
 
 interface BottomSheetMetrics {
@@ -129,7 +129,7 @@ const BottomSheet = () => {
     }
 
     if (touchMove.movingDirection === "up") {
-      sheetRef.current.style.transform = `translateY(0%)`;
+      sheetRef.current.style.transform = `translateY(10%)`;
     }
 
     // metrics 초기화.
