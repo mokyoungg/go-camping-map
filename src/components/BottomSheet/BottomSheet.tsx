@@ -6,6 +6,10 @@ import { useRef, TouchEvent } from "react";
 
 const cx = classNames.bind(styles);
 
+// 설정할 최대, 최소 높이
+export const MIN_Y = 100; // 바텀시트가 최대로 높이 올라갔을 때의 y 값
+export const MAX_Y = window.innerHeight * 0.8; // 바텀시트가 최소로 내려갔을 때의 y 값
+
 interface BottomSheetMetrics {
   touchStart: {
     sheetY: number; // touchstart에서 BottomSheet의 최상단 모서리의 Y값
@@ -91,8 +95,22 @@ const BottomSheet = () => {
       // 업데이트되어야 할 sheetRef 의 y 값
       let nextSheetY = touchStart.sheetY + touchOffset;
 
+      // nextSheetY 는 MIN_Y와 MAX_Y 사이의 값으로 clamp 되어야 한다
+      if (nextSheetY <= MIN_Y) {
+        nextSheetY = MIN_Y;
+      }
+
+      if (nextSheetY >= MAX_Y) {
+        nextSheetY = MAX_Y;
+      }
+
       // sheet 위치 갱신.
-      sheetRef.current.style.transform = `translateY(${nextSheetY}px)`;
+      // 성능 최적화를 위해 requestAnimationFrame 사용
+      window.requestAnimationFrame(() => {
+        if (sheetRef.current) {
+          sheetRef.current.style.transform = `translateY(${nextSheetY}px)`;
+        }
+      });
     } else {
       // 컨텐츠를 스크롤하는 동안에는 body가 스크롤되는 것을 막습니다
       document.body.style.overflowY = "hidden";
@@ -111,7 +129,7 @@ const BottomSheet = () => {
     }
 
     if (touchMove.movingDirection === "up") {
-      sheetRef.current.style.transform = `translateY(0%)`; //
+      sheetRef.current.style.transform = `translateY(0%)`;
     }
 
     // metrics 초기화.
