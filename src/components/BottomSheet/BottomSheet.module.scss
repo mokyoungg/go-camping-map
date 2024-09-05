@@ -1,0 +1,37 @@
+@import "../../styles/utils";
+
+.container {
+  position: fixed;
+  bottom: 0; /* 화면 하단에서 시작 */
+  left: 0;
+  right: 0;
+  height: 100vh;
+  background-color: #fff;
+  box-shadow: 0px -5px 15px rgba(0, 0, 0, 0.2);
+  border-radius: 16px 16px 0 0;
+  transition: transform 0.3s ease-in-out;
+  z-index: 100;
+  transform: translateY(80%);
+  overflow-y: auto;
+
+  &--open {
+    transform: translateX(0);
+  }
+
+  .header {
+    height: rem(48);
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    position: relative;
+    padding-top: rem(16);
+    padding-bottom: rem(4);
+
+    .handle {
+      width: rem(32);
+      height: rem(4);
+      border-radius: 2px;
+      background-color: #d0d0d0;
+      margin: auto;
+    }
+  }
+}
