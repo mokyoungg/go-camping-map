@@ -1,6 +1,7 @@
 @import "../../styles/utils";
 
 $searchbar-height: rem(74);
+$handle-height: rem(48);
 
 .container {
   position: relative;
@@ -11,6 +12,11 @@ $searchbar-height: rem(74);
     display: flex;
     flex-direction: column;
     overflow-y: scroll;
+    // overflow: visible;
+
+    @media screen and (max-width: 768px) {
+      height: calc(100vh - #{$searchbar-height} - #{$handle-height});
+    }
 
     .list-item {
       border-top: 1px solid var(--gray4);
@@ -25,6 +31,10 @@ $searchbar-height: rem(74);
     gap: rem(12);
     overflow-y: scroll;
     padding: rem(15) rem(25);
+
+    @media screen and (max-width: 768px) {
+      height: calc(100vh - #{$searchbar-height} - #{$handle-height});
+    }
 
     .img-wrapper {
       width: 100%;
