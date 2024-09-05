@@ -33,6 +33,8 @@ const Map = () => {
   useEffect(() => {
     if (!mapElement.current || !naver) return;
 
+    console.log("Initialize Map");
+
     const mapOption = {
       center: new naver.maps.LatLng(lat, lng),
       zoom: 13,
