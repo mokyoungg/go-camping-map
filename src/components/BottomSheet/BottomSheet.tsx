@@ -170,6 +170,26 @@ const BottomSheet = () => {
     };
   }, []);
 
+  useEffect(() => {
+    if (!contentRef.current) return;
+
+    const content = contentRef.current;
+
+    content.addEventListener(
+      "touchmove",
+      (e) => {
+        e.stopPropagation();
+      },
+      { passive: true }
+    );
+
+    return () => {
+      content.removeEventListener("touchmove", (e) => {
+        e.stopPropagation();
+      });
+    };
+  }, []);
+
   return (
     <div
       className={cx("container", { "container--open": false })}
