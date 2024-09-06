@@ -2,7 +2,7 @@ import styles from "./BottomSheet.module.scss";
 import classNames from "classnames/bind";
 import CampingList from "../CampingList/CampingList";
 import SearchBar from "../SearchBar/SearchBar";
-import { useRef, TouchEvent } from "react";
+import { useRef, TouchEvent, useEffect } from "react";
 
 const cx = classNames.bind(styles);
 
@@ -149,6 +149,26 @@ const BottomSheet = () => {
   const handleContentTouchStart = () => {
     meticsRef.current.isContentAreaTouched = true;
   };
+
+  useEffect(() => {
+    if (!sheetRef.current) return;
+
+    const sheet = sheetRef.current;
+
+    sheet.addEventListener(
+      "touchmove",
+      (e) => {
+        e.preventDefault();
+      },
+      {
+        passive: false,
+      }
+    );
+
+    return () => {
+      sheet.removeEventListener("touchmove", (e) => e.preventDefault());
+    };
+  }, []);
 
   return (
     <div
